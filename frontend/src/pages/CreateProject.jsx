@@ -1,7 +1,7 @@
-import { Button, Layout, Typography, Space, Card } from "antd";
+import { Button, Layout, Typography, Space, Card, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useCreateProject } from "../mutations/useCreateProject";
-
+import { useNavigate } from "react-router-dom";
 const { Header, Footer, Content } = Layout;
 const { Title, Text } = Typography;
 
@@ -39,11 +39,14 @@ const cardStyle = {
 };
 
 const CreateProject = () => {
-  const { createProjectMutation } = useCreateProject();
+  const navigate = useNavigate();
+  const { createProjectMutation, isPending } = useCreateProject();
 
   const handleCreateProject = async () => {
     try {
-      await createProjectMutation();
+      const res = await createProjectMutation();
+      console.log(res.data);
+      setTimeout(() => navigate(`/project/${res.data}`), 500);
     } catch (err) {
       console.error("Error creating project", err);
     }
@@ -79,6 +82,14 @@ const CreateProject = () => {
               Create Playground
             </Button>
           </Space>
+          {isPending && (
+            <div style={{ textAlign: "center", marginTop: 12 }}>
+              <Space direction="vertical" size="small">
+                <Spin size="small" />
+                <Text type="secondary">Creating your project…</Text>
+              </Space>
+            </div>
+          )}
         </Card>
       </Content>
 
