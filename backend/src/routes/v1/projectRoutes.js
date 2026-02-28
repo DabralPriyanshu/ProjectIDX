@@ -2,6 +2,6 @@ import express from "express";
 import projectController from "../../controllers/projectController.js";
 const projectRouter = express.Router();
 
-projectRouter.get("/", projectController.createProject);
+projectRouter.post("/", projectController.createProject);
 
 export default projectRouter;
