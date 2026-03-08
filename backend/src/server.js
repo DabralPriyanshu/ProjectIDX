@@ -28,9 +28,13 @@ editorNamespace.on("connection", (socket) => {
   console.log("editor event");
 
   //somehow we will get the projectId from frontend
-  let projectId = "123";
+  console.log(socket.handshake.query.projectId);
+  // const queryParams = queryString.parse(socket.handshake.query);
+  let projectId = socket.handshake.query.projectId;
+  console.log("Project Id received after connection ", projectId);
+  let watcher = null;
   if (projectId) {
-    var watcher = chokidar.watch(`./projects/${projectId}`, {
+    watcher = chokidar.watch(`./projects/${projectId}`, {
       ignored: (path) => {
         return path.includes("node_modules");
       },

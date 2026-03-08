@@ -26,8 +26,12 @@ export const handleEditorSocketEvents = (socket) => {
   });
   socket.on("readFile", async ({ pathToFileOrFolder }) => {
     try {
-      const response = await fs.readFile(pathToFileOrFolder, "utf-8");
-      socket.emit("readFileSuccess", { data: response.toString() });
+      const response = await fs.readFile(pathToFileOrFolder);
+      console.log(response.toString());
+      socket.emit("readFileSuccess", {
+        value: response.toString(),
+        path: pathToFileOrFolder,
+      });
     } catch (error) {
       console.log("Error reading the file", error);
       socket.emit("error", { data: "Error reading the file" });

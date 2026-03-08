@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import FileIcon from "../../atoms/FileIcon/FileIcon";
+import { useEditorSocketStore } from "../../../store/editorSocketStore";
 const Tree = ({ fileFolderData }) => {
   const [visibility, setVisibility] = useState({});
+  const { editorSocket } = useEditorSocketStore();
   function toggleVisibility(name) {
     setVisibility({ ...visibility, [name]: !visibility[name] });
   }
   function computeExtension(fileFolderData) {
     const names = fileFolderData.name.split(".");
     return names[names.length - 1];
+  }
+  function handleClick(fileFolderData) {
+    console.log("Clicked on ", fileFolderData);
+    if (editorSocket) {
+      editorSocket.emit("readFile", {
+        pathToFileOrFolder: fileFolderData.path,
+      });
+    } else {
+      console.log("no connection");
+    }
   }
   return (
     fileFolderData && (
@@ -54,6 +66,7 @@ const Tree = ({ fileFolderData }) => {
             </div>
 
             <span
+              onClick={() => handleClick(fileFolderData)}
               style={{
                 fontSize: "14px",
                 color: "white",

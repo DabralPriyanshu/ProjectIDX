@@ -4,17 +4,25 @@ import EditorComponent from "../components/molecules/EditorComponent/EditorCompo
 import EditorButton from "../components/atoms/EditorButton/EditorButton";
 import TreeStructure from "../components/organisms/TreeStructure/TreeStructure";
 import { useTreeStructureStore } from "../store/treeStructureStore";
+import { useEditorSocketStore } from "../store/editorSocketStore";
+import { io } from "socket.io-client";
 const ProjectPlayground = () => {
   const { projectId: projectIdFromUrl } = useParams();
   const { setProjectId, projectId } = useTreeStructureStore();
+  const { setEditorSocket } = useEditorSocketStore();
 
   useEffect(() => {
+    if (projectIdFromUrl) {
+      const editorSocketConn = io(`${import.meta.env.VITE_API_SOCKET}/editor`, {
+        query: { projectId: projectIdFromUrl },
+      });
+      setEditorSocket(editorSocketConn);
+    }
     setProjectId(projectIdFromUrl);
-  }, [setProjectId, projectIdFromUrl]);
+  }, [setProjectId, projectIdFromUrl, setEditorSocket]);
 
   return (
     <div style={styles.mainWrapper}>
-      {/* 1. Sidebar (Tree Structure) */}
       {projectId && (
         <aside style={styles.sidebar}>
           <div style={styles.sidebarHeader}>EXPLORER</div>
@@ -22,12 +30,9 @@ const ProjectPlayground = () => {
         </aside>
       )}
 
-      {/* 2. Editor Area (Main Content) */}
       <main style={styles.editorArea}>
-        {/* Monaco Editor iske andar flex: 1 lega */}
         <EditorComponent />
 
-        {/* Buttons Floating or Bottom */}
         <div style={styles.buttonContainer}>
           <EditorButton />
           <EditorButton isActive={true} />
@@ -37,17 +42,16 @@ const ProjectPlayground = () => {
   );
 };
 
-// --- Professional CSS-in-JS ---
 const styles = {
   mainWrapper: {
     display: "flex",
-    height: "100vh", // Pura screen cover karega
+    height: "100vh",
     width: "100vw",
-    backgroundColor: "#1e1e1e", // Editor dark theme background
-    overflow: "hidden", // Main page scroll nahi hona chahiye
+    backgroundColor: "#1e1e1e",
+    overflow: "hidden",
   },
   sidebar: {
-    backgroundColor: "#252526", // VS Code sidebar color
+    backgroundColor: "#252526",
     minWidth: "250px",
     maxWidth: "400px",
     width: "20%",
@@ -55,7 +59,7 @@ const styles = {
     borderRight: "1px solid #333",
     display: "flex",
     flexDirection: "column",
-    overflowY: "auto", // Sirf sidebar scroll hoga
+    overflowY: "auto",
   },
   sidebarHeader: {
     padding: "10px 20px",
@@ -65,7 +69,7 @@ const styles = {
     letterSpacing: "1px",
   },
   editorArea: {
-    flex: 1, // Ye sabse important hai! Bachi hui width ye lega
+    flex: 1,
     position: "relative",
     display: "flex",
     flexDirection: "column",
@@ -78,7 +82,7 @@ const styles = {
     right: "20px",
     display: "flex",
     gap: "10px",
-    zIndex: 10, // Editor ke upar dikhega
+    zIndex: 10,
   },
 };
 export default ProjectPlayground;
