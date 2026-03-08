@@ -6,6 +6,10 @@ const Tree = ({ fileFolderData }) => {
   function toggleVisibility(name) {
     setVisibility({ ...visibility, [name]: !visibility[name] });
   }
+  function computeExtension(fileFolderData) {
+    const names = fileFolderData.name.split(".");
+    return names[names.length - 1];
+  }
   return (
     fileFolderData && (
       <div style={{ padding: "15px", color: "white" }}>
@@ -30,19 +34,34 @@ const Tree = ({ fileFolderData }) => {
             {fileFolderData.name}
           </button>
         ) : (
-          <div style={{ display: "flex" }}>
-            <FileIcon extension={fileFolderData.name.split(".")[1]} />
-            <p
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center", 
+              padding: "4px 0", 
+              cursor: "pointer",
+            }}
+          >
+           
+            <div
               style={{
-                paddingTop: "10px",
-                fontSize: "16px",
-                cursor: "pointer",
-                marginLeft: "5px",
+                display: "flex",
+                alignItems: "center",
+                marginRight: "8px",
+              }}
+            >
+              <FileIcon extension={computeExtension(fileFolderData)} />
+            </div>
+
+            <span
+              style={{
+                fontSize: "14px",
                 color: "white",
+                lineHeight: "1", 
               }}
             >
               {fileFolderData.name}
-            </p>
+            </span>
           </div>
         )}
         {visibility[fileFolderData.name] &&

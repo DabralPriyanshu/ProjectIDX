@@ -1,17 +1,18 @@
 import React from "react";
-import { FaJs } from "react-icons/fa";
+import { FaJs, FaFileAlt, FaCss3 } from "react-icons/fa"; 
 import { GrReactjs } from "react-icons/gr";
+
 const FileIcon = ({ extension }) => {
+  const iconStyle = { height: "18px", width: "18px", display: "block" };
+
+  const iconMapper = {
+    js: <FaJs color="#f7df1e" style={iconStyle} />,
+    jsx: <GrReactjs color="#61dafb" style={iconStyle} />,
+    css: <FaCss3 color="#3c99dc" style={iconStyle} />,
+  };
+
   return (
-    <>
-      {" "}
-      {extension === "js" && (
-        <FaJs color="yellow" style={{ height: "25px", width: "25px" }} />
-      )}
-      {extension === "jsx" && (
-        <GrReactjs color="blue" style={{ height: "25px", width: "25px" }} />
-      )}
-    </>
+    <>{iconMapper[extension] || <FaFileAlt color="#999" style={iconStyle} />}</>
   );
 };
 
