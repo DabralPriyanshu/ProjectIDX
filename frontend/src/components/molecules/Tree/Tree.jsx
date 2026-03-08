@@ -23,7 +23,8 @@ const Tree = ({ fileFolderData }) => {
               color: "white",
               backgroundColor: "transparent",
               paddingTop: "15px",
-              fontSize: "16px",
+              fontSize: "12px",
+              fontWeight: "bold",
             }}
           >
             {visibility[fileFolderData.name] ? (
@@ -37,12 +38,11 @@ const Tree = ({ fileFolderData }) => {
           <div
             style={{
               display: "flex",
-              alignItems: "center", 
-              padding: "4px 0", 
+              alignItems: "center",
+              padding: "4px 0",
               cursor: "pointer",
             }}
           >
-           
             <div
               style={{
                 display: "flex",
@@ -57,7 +57,7 @@ const Tree = ({ fileFolderData }) => {
               style={{
                 fontSize: "14px",
                 color: "white",
-                lineHeight: "1", 
+                lineHeight: "1",
               }}
             >
               {fileFolderData.name}
